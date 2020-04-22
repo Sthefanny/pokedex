@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:pokedex/app/common/repositories/pokeapi_repository.dart';
+import 'package:pokedex/app/common/services/pokeapi_service.dart';
 import 'package:pokedex/app/modules/home/home_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokedex/app/modules/home/home_page.dart';
@@ -5,7 +8,9 @@ import 'package:pokedex/app/modules/home/home_page.dart';
 class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => HomeController()),
+        Bind((i) => PokeapiRepository(Dio())),
+        Bind((i) => PokeapiService(i.get<PokeapiRepository>())),
+        Bind((i) => HomeController(i.get<PokeapiService>())),
       ];
 
   @override
