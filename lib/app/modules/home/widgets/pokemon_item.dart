@@ -31,18 +31,18 @@ class _PokemonItemState extends State<PokemonItem> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(3),
               child: SvgPicture.asset(
                 'assets/images/pokeball.svg',
                 color: Colors.white.withOpacity(0.3),
-                width: 90,
+                width: 80,
               ),
             ),
           ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(3),
               child: getImage(number: widget.pokemon.number),
             ),
           ),
@@ -50,11 +50,28 @@ class _PokemonItemState extends State<PokemonItem> {
             margin: EdgeInsets.all(15),
             child: Text(
               widget.pokemon.name,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 16,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.pokemon.type.length,
+              itemBuilder: (_, index) {
+                var type = widget.pokemon.type[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    buildType(type),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -64,12 +81,26 @@ class _PokemonItemState extends State<PokemonItem> {
 
   Widget getImage({@required String number}) {
     return CachedNetworkImage(
-      placeholder: (context, url) => Center(
-        child: CircularProgressIndicator(),
-      ),
+      placeholder: (context, url) => CircularProgressIndicator(),
       imageUrl:
           'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/$number.png',
-      width: 90,
+      width: 80,
+    );
+  }
+
+  Widget buildType(String type) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.all(6),
+      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+      child: Text(
+        type.trim(),
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+      ),
     );
   }
 }
